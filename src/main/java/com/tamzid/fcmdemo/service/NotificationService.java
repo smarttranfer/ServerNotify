@@ -6,7 +6,7 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.*;
 import com.tamzid.fcmdemo.dto.NotificationRequestDto;
 import com.tamzid.fcmdemo.dto.SubscriptionRequestDto;
-import org.aspectj.weaver.ast.Not;
+//import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import lombok.extern.slf4j.Slf4j;
@@ -58,7 +58,7 @@ public class NotificationService {
         }
     }
 
-    public String sendPnsToDevice(NotificationRequestDto notificationRequestDto) {
+    public String sendPnsToDevice(NotificationRequestDto notificationRequestDto , String Token) {
 
         AndroidNotification androidNofi = AndroidNotification.builder()
                 .setSound("default")
@@ -73,7 +73,7 @@ public class NotificationService {
                                 .setSound(String.valueOf(androidNofi))
                                 .build())
                         .build())
-                .setToken("eWF5M7T67E32kTkJpIjF7z:APA91bFWwGJowGEnF1MMIS09p4Bz4ifiOjXjtWNlJk1jAHODO24I7huU8CIgXLeituFhj766CyDlGZghhbSWmZw-kjWYE1UHKqCU6xIV0NvWEIrXY6r7tRBW3Pl5RSK66hGQk4tymLgd")
+                .setToken(Token)
                 .setNotification(new Notification("CMSM INFORMATION " , "   Domain :"+ notificationRequestDto.getDomain()+"\n"+"   EventTime :" + notificationRequestDto.getEventtime() + "\n" +  "   Content :" + notificationRequestDto.getContent() + "\n" + "   Level :" + notificationRequestDto.getLevel()))
                 .putData("content", notificationRequestDto.getDomain())
                 .putData("body", (notificationRequestDto.getContent()))
@@ -84,6 +84,7 @@ public class NotificationService {
             response = FirebaseMessaging.getInstance().send(message);
         } catch (FirebaseMessagingException e) {
             log.error("Fail to send firebase notification", e);
+
         }
         return response;
     }
